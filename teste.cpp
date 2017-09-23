@@ -1,4 +1,6 @@
 #include "Aria.h"
+#include <iostream>
+using namespace std;
 
 int main(int argc, char **argv)
 {
@@ -27,8 +29,18 @@ int main(int argc, char **argv)
     Aria::exit(1);
   }
 
-  robot.enableMotors();
-  robot.runAsync(true); 
+  ArLog::log(ArLog::Normal, "simpleConnect: Connected to robot.");
+
+  double xi,yi,g,xf,yf;
+  cout << "O programa comeca agora!!" << endl;
+  cin >> xi;
+  cin >> yi;
+  cin >> g;
+  cin >> xf;
+  cin >> yf;
+  printf("X inicial: %.1f \nY inicial: %.1f\nGrau: %.1f \nX Final: %.1f \nY Final: %.1f\n",xi,yi,g,xf,yf);
+  /*robot.enableMotors();
+  robot.runAsync(true);
   robot.lock();
   bool soc = robot.hasStateOfCharge();
 
@@ -43,8 +55,7 @@ int main(int argc, char **argv)
   robot.unlock();
 
   robot.stopRunning();
-  robot.waitForRunExit();
+  robot.waitForRunExit();*/
   Aria::exit(0);
   return 0;
 }
-
