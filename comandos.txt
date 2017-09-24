@@ -1,0 +1,28 @@
+osboxes@osboxes: sudo mount -t vboxsf Host ./work -o uid=osboxes,gid=osboxes 
+#                ^--|
+#<<< monta a pasta compartilhada dentro da maquina virtual no diretorio work.
+#<<< Host foi o nome dado a pasta compartilhada no VirtualBox, substituir
+#<<< pelo nome que voce deu.
+
+osboxes@osboxes:/usr/local/Aria/examples$ cp actionExample.cpp ~/work
+#                                         ^--|
+#<<< copia o arquivo de exemplo actionExample.cpp na sua pasta de trabalho.
+#<<< note que no exemplo ja estamos no diretorio /usr/local/Aria/examples
+#<<< voce pode fazer isso na interface grafica, usando o Caja
+#<<< (equivalente do Windows Explorer na maquina virtual)
+
+osboxes@osboxes:~/work$ g++ actionExample.cpp -o ae -I /usr/local/Aria/include -Wl,-rpath,/usr/local/Aria/lib -L/usr/local/Aria/lib -lAria
+#                       ^--|
+#<<< compila o programa exemplo "actionExample.cpp" gerando o arquivo binario 
+#<<< "ae" no diretorio atual
+
+osboxes@osboxes:/usr/local/Aria/maps$ MobileSim -m ./office.map -r p3dx-nolaser
+#                                     ^--|
+#<<< roda o simulador com o mapa office.map e o robo p3dx-nolaser.
+#<<< note que se esta no diretorio /usr/local/Aria/maps onde estao os mapas
+#<<< de exemplo. Se nao for o caso, pode-se passar o caminho completo para o
+#<<< office.map (/usr/local/Aria/maps/office.map)
+
+osboxes@osboxes:~/work$ ./ae
+#                       ^--|
+#<<< execulta o arquivo binario chamado "ae" do diretorio atual
