@@ -31,14 +31,14 @@ int main(int argc, char **argv)
 
   ArLog::log(ArLog::Normal, "simpleConnect: Connected to robot.");
 
-  double xInicial_Mapa,yInial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa;
+  double xInicial_Mapa,yInicial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa;
   cout << "O programa comeca agora!!" << endl;
   cin >> xInicial_Mapa;
-  cin >> yInial_Mapa;
+  cin >> yInicial_Mapa;
   cin >> angulo;
   cin >> xFinal_Mapa;
   cin >> yFinal_Mapa;
-  printf("X inicial: %.1f \nY inicial: %.1f\nGrau: %.1f \nX Final: %.1f \nY Final: %.1f\n",xInicial_Mapa,yInial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa);
+  printf("X inicial: %.1f \nY inicial: %.1f\nGrau: %.1f \nX Final: %.1f \nY Final: %.1f\n",xInicial_Mapa,yInicial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa);
 
   robot.runAsync(true); //Roda no modo assicrono
 
@@ -51,8 +51,14 @@ int main(int argc, char **argv)
   robot.setDeltaHeading(0); //60 graus relativo a orientação atual
   robot.unlock(); //Desbloqueia o robô
 
-  int count = 1;
-  char ent;
+  cout << "Posicao X inicial do robo antes do set: " << robot.getX() << endl;
+  cout << "Posicao Y inicial do robo antes do set: " << robot.getY() << endl;
+  cout << "Transformando posicao do robo em relacao ao mapa..." << endl;
+  robot.moveTo(ArPose(xInicial_Mapa,yInicial_Mapa,angulo),ArPose(robot.getX(),robot.getY(),robot.getTh()));
+  cout << "Posicao X inicial do robo depois do set: " << robot.getX() << endl;
+  cout << "Posicao Y inicial do robo depois do set: " << robot.getY() << endl;
+
+  /*int count = 1;
   while (true) {
     robot.move(50); //Move 200 mm/s pra frente
     if(count%10000 == 0){
@@ -60,7 +66,7 @@ int main(int argc, char **argv)
     cout << "Posicao Y em relacao a ele: " << robot.getY() << endl << endl;
     }
     count++;
-  }
+  }*/
 
   /*robot.enableMotors();
   robot.runAsync(true);
