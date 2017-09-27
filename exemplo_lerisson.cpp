@@ -61,7 +61,7 @@ while(!robot.isHeadingDone());
 robot.setVel(vel);
 //Realiza menor medida dos sonares frontais
 valorsonar=robot.getClosestSonarRange(-90,90);
-robot.moveTo(ArPose(robot.getX(),robot.getY(),robot.getTh()))
+robot.moveTo(ArPose(robot.getX(),robot.getY(),robot.getTh()));
 }
 Aria::exit(0);
 }
