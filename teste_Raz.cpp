@@ -1,5 +1,8 @@
 #include "Aria.h"
 #include <iostream>
+#include <vector>
+#include <map>
+#define pb push_back
 using namespace std;
 
 int main(int argc, char **argv)
@@ -31,6 +34,20 @@ int main(int argc, char **argv)
 
   ArLog::log(ArLog::Normal, "simpleConnect: Connected to robot.");
 
+  //struct que representa um nó que possui os atributos de coordenadas x e y para uma instância
+  struct no_coord{
+    int x;
+    int y;
+  };
+
+  //estruturas de dados necessarias para implementação do A*
+  vector<no_coord> closedSet;
+  vector<no_coord> openSet;
+  map<no_coord,no_coord> cameFrom;
+  map<no_coord,int> g_Score;
+  map<no_coord,int> f_Score;
+  map<no_coord,vector<no_coord> > grafo;
+
   double xInicial_Mapa,yInicial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa;
   cout << "O programa comeca agora!!" << endl;
   cin >> xInicial_Mapa;
@@ -57,6 +74,44 @@ int main(int argc, char **argv)
   robot.moveTo(ArPose(xInicial_Mapa,yInicial_Mapa,angulo),ArPose(robot.getX(),robot.getY(),robot.getTh()));
   cout << "Posicao X inicial do robo depois do set: " << robot.getX() << endl;
   cout << "Posicao Y inicial do robo depois do set: " << robot.getY() << endl;
+
+
+  no_coord start;
+  start.x = robot.getX();
+  start.y = robot.getY();
+
+  openSet.pb();
+  g_Score[start] = 0;
+  //implementar função heuristica para essa atribuição local do map
+  f_Score[start] = heuristic_cost_estimate(start,goal);
+
+
+
+  grafo[start].pb(/*inserção de N pontos possiveis de atingir a partir de um determinado ponto atual*/);
+
+  while(!openSet.size() == 0){
+    no_coord atual = openSet[0];
+    int apagar;
+    for(int i=0;i<openSet.size();++i){
+        if(f_Score[openSet[i]] < f_Score[atual]) atual = openSet[i]; apagar = i;
+    }
+    openSet.erase(openSet.begin()+apagar);
+    closedSet.pb(atual);
+
+    for(int i=0;i<grafo[atual].size();++i){
+      vizinho = grafo[atual][i];
+      if(in(closedSet,vizinho) continue;
+      if(!in(openSet,vizinho) openSet.pb(vizinho);
+      tentative_gScore = g_Score[atual] + dist_between(atual,vizinho); //dist_between() é uma função a ser feita ainda
+                                                                       // que calcula a distancia entre dois pontos
+      if(tentative_gScore >= g_Score[vizinho]) continue;
+
+      cameFrom[vizinho] = atual;
+      g_Score[vizinho] = tentative_gScore;
+      f_Score[vizinho] = g_Score[vizinho] + heuristic_cost_estimate(vizinho,objetivo);
+    }
+  }
+
 
   /*int count = 1;
   while (true) {
@@ -86,5 +141,12 @@ int main(int argc, char **argv)
   robot.stopRunning();
   robot.waitForRunExit();*/
   Aria::exit(0);
+  return 0;
+}
+
+bool in(vector<no_coord> vec, no_coord valor){
+  for(int i=0;i<vec.size();++i){
+    if(vec[i] == valor) return 1;
+  }
   return 0;
 }
