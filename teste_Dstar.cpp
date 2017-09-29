@@ -586,6 +586,34 @@ bool Dstar::replan() {
   return true;
 }
 
+int rotacao(int th_atual, int x_atual, int y_atual, int x_final, int y_final)
+{
+  int th_final;
+  if(th_atual == 0 || th_atual == 360 || th_atual == 180)
+  {
+    if(y_final > y_atual)
+    {
+      th_final = 90 - th_atual;
+    }
+    else
+    {
+      th_final = 270 - th_atual;
+    }
+  }
+  else
+  {
+    if(x_final > x_atual)
+    {
+      th_final = 360 - th_atual;
+    }
+    else
+    {
+      th_final = 180 - th_atual;
+    }
+  }
+  return th_final;
+}
+
 int main(int argc, char** argv)
 {
   double xInicial_Mapa,yInicial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa;
@@ -622,7 +650,7 @@ int main(int argc, char** argv)
   //Inicializa variaveis de velocidade(vel), distancia(dist) e leiturade sonar(valorsonar)
    int vel,valorsonar,dist;
   vel = 200;
-  dist = 501;
+  dist = 600;
   //Inicializa robo
    robot.runAsync(true);
 
@@ -664,7 +692,10 @@ int main(int argc, char** argv)
       if(valorsonar<=dist)
       {
         cout<< "ENTREI AQUI NO IF 0" << endl;
-        robot.move(-500);
+        cout<< "Valor do sonar: " << valorsonar << endl;
+        robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+        while(!robot.isHeadingDone());
+        robot.move(500);
         while(!robot.isMoveDone());
         dstar->updateStart(robot.getX(),robot.getY());
         dstar->replan();               // plan a path
@@ -680,7 +711,10 @@ int main(int argc, char** argv)
           if(valorsonar<=dist)
           {
             cout<< "ENTREI AQUI NO IF 1" << endl;
-            robot.move(-500);
+            cout<< "Valor do sonar: " << valorsonar << endl;
+            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+            while(!robot.isHeadingDone());
+            robot.move(500);
             while(!robot.isMoveDone());
             dstar->updateStart(robot.getX(),robot.getY());
             dstar->replan();               // plan a path
@@ -689,6 +723,7 @@ int main(int argc, char** argv)
           }
           else{
             cout<< "ENTREI AQUI NO ELSE 1" << endl;
+            cout<< "Valor do sonar: " << valorsonar << endl;
             robot.move(500);
             while(!robot.isMoveDone());
           }
@@ -700,7 +735,10 @@ int main(int argc, char** argv)
           if(valorsonar<=dist)
           {
             cout<< "ENTREI AQUI NO IF 2" << endl;
-            robot.move(-500);
+            cout<< "Valor do sonar: " << valorsonar << endl;
+            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+            while(!robot.isHeadingDone());
+            robot.move(500);
             while(!robot.isMoveDone());
             dstar->updateStart(robot.getX(),robot.getY());
             dstar->replan();               // plan a path
@@ -709,6 +747,7 @@ int main(int argc, char** argv)
           }
           else{
             cout<< "ENTREI AQUI NO ELSE 2" << endl;
+            cout<< "Valor do sonar: " << valorsonar << endl;
             robot.move(500);
             while(!robot.isMoveDone());
           }
@@ -720,7 +759,10 @@ int main(int argc, char** argv)
           if(valorsonar<=dist)
           {
             cout<< "ENTREI AQUI NO IF 3" << endl;
-            robot.move(-500);
+            cout<< "Valor do sonar: " << valorsonar << endl;
+            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+            while(!robot.isHeadingDone());
+            robot.move(500);
             while(!robot.isMoveDone());
             dstar->updateStart(robot.getX(),robot.getY());
             dstar->replan();               // plan a path
@@ -741,7 +783,10 @@ int main(int argc, char** argv)
           if(valorsonar<=dist)
           {
             cout<< "ENTREI AQUI NO IF 4" << endl;
-            robot.move(-500);
+            cout<< "Valor do sonar: " << valorsonar << endl;
+            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+            while(!robot.isHeadingDone());
+            robot.move(500);
             while(!robot.isMoveDone());
             dstar->updateStart(robot.getX(),robot.getY());
             dstar->replan();               // plan a path
@@ -750,6 +795,7 @@ int main(int argc, char** argv)
           }
           else{
             cout<< "ENTREI AQUI NO ELSE 4" << endl;
+            cout<< "Valor do sonar: " << valorsonar << endl;
             robot.move(500);
             while(!robot.isMoveDone());
           }
