@@ -696,7 +696,8 @@ int main(int argc, char** argv)
 
   cout<< "O tamanho do caminho eh: " << mypath.size() << endl;
 
-  while(robot.getX() != xFinal_Mapa && robot.getY() != yFinal_Mapa)
+  while(!(xFinal_Mapa-500 < robot.getX() && robot.getX() < xFinal_Mapa + 500)
+  || !(yFinal_Mapa-500 < robot.getY() && robot.getY() < yFinal_Mapa + 500))
   {
     int count = 1;
     itera i = mypath.begin();
@@ -804,4 +805,7 @@ int main(int argc, char** argv)
     dstar->replan();               // plan a path
     mypath = dstar->getPath();     // retrieve path
   }
+  cout<< "SAI DESSA PORRA!!!" << endl;
+  Aria::exit(1);
+  return 0;
 }
