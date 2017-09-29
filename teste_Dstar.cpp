@@ -422,11 +422,10 @@ void Dstar::getSucc(state u,list<state> &s) {
 void Dstar::getPred(state u,list<state> &s) {
 
   s.clear();
-  u.k.first  = -1;
   u.k.second = -1;
-
+  u.k.first  = -1;
   u.x += 1;
-  if (!occupied(u)) s.push_front(u);
+
   u.y += 1;
   if (!occupied(u)) s.push_front(u);
   u.x -= 1;
@@ -440,6 +439,7 @@ void Dstar::getPred(state u,list<state> &s) {
   u.x += 1;
   if (!occupied(u)) s.push_front(u);
   u.x += 1;
+  if (!occupied(u)) s.push_front(u);
   if (!occupied(u)) s.push_front(u);
 
 }
@@ -477,8 +477,8 @@ void Dstar::updateGoal(int x, int y) {
   ds_ch::iterator i;
   list< pair<ipoint2, double> >::iterator kk;
 
+  if (!close(i->second.cost, C1)) {
   for(i=cellHash.begin(); i!=cellHash.end(); i++) {
-    if (!close(i->second.cost, C1)) {
       tp.first.x = i->first.x;
       tp.first.y = i->first.y;
       tp.second = i->second.cost;
@@ -655,45 +655,49 @@ int main(int argc, char** argv)
   cout<< "O tamanho do caminho eh: " << mypath.size() << endl;
 
   //cout << "O X do primeiro eh: " << mypath.begin()->x << " e o Y do primeiro eh: " << mypath.begin()->y << endl;
-
+  int count = 1;
   itera i = mypath.begin();
   valorsonar=robot.getClosestSonarRange(-90,90);
   while(i!=mypath.end()){
-    if(valorsonar<=dist)
+    if(count % 500 == 0)
     {
-      dstar->updateStart(robot.getX(),robot.getY());
-      dstar->replan();               // plan a path
-      mypath = dstar->getPath();     // retrieve path
-      i = mypath.begin();
+      if(valorsonar<=dist)
+      {
+        dstar->updateStart(robot.getX(),robot.getY());
+        dstar->replan();               // plan a path
+        mypath = dstar->getPath();     // retrieve path
+        i = mypath.begin();
+      }
+      else
+      {
+        if(i->x > robot.getX()){ //Se o X destino for maior que o X atual, gira o robo pra grau 0 e anda 1mm
+          robot.setDeltaHeading(360-robot.getTh());
+          while(!robot.isHeadingDone());
+          robot.move(500);
+          while(!robot.isMoveDone());
+        }
+        else if(i->x < robot.getX()){ //Se o X destino for menor que o X atual, gira o robo pra grau 180 e anda 1mm
+          robot.setDeltaHeading(180-robot.getTh());
+          while(!robot.isHeadingDone());
+          robot.move(500);
+          while(!robot.isMoveDone());
+        }
+        if(i->y > robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 90 e anda 1mm
+          robot.setDeltaHeading(90-robot.getTh());
+          while(!robot.isHeadingDone());
+          robot.move(500);
+          while(!robot.isMoveDone());
+        }
+        else if(i->y < robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 270 e anda 1mm
+          robot.setDeltaHeading(270-robot.getTh());
+          while(!robot.isHeadingDone());
+          robot.move(500);
+          while(!robot.isMoveDone());
+        }
+      }
+      valorsonar=robot.getClosestSonarRange(-90,90);
     }
-    else
-    {
-      if(i->x > robot.getX()){ //Se o X destino for maior que o X atual, gira o robo pra grau 0 e anda 1mm
-        robot.setDeltaHeading(360-robot.getTh());
-        while(!robot.isHeadingDone());
-        robot.move(1);
-        while(!robot.isMoveDone());
-      }
-      else if(i->x < robot.getX()){ //Se o X destino for menor que o X atual, gira o robo pra grau 180 e anda 1mm
-        robot.setDeltaHeading(180-robot.getTh());
-        while(!robot.isHeadingDone());
-        robot.move(1);
-        while(!robot.isMoveDone());
-      }
-      if(i->y > robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 90 e anda 1mm
-        robot.setDeltaHeading(90-robot.getTh());
-        while(!robot.isHeadingDone());
-        robot.move(1);
-        while(!robot.isMoveDone());
-      }
-      else if(i->y < robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 270 e anda 1mm
-        robot.setDeltaHeading(270-robot.getTh());
-        while(!robot.isHeadingDone());
-        robot.move(1);
-        while(!robot.isMoveDone());
-      }
-    }
-    valorsonar=robot.getClosestSonarRange(-90,90);
-    ++i;
+    i++;
+    count++;
   }
 }
