@@ -676,7 +676,7 @@ int main(int argc, char** argv)
   //Faz com que o robo se movimente com velocidade vel
   robot.setVel(vel);
    //Realiza medida do menor valor apresentado pelos sonares frontais
-  valorsonar=robot.getClosestSonarRange(-90,90);
+  valorsonar=robot.getClosestSonarRange(-30,30);
   //Seta a posição do robô em relação ao mapa
   cout << "Posicao X inicial do robo antes do set: " << robot.getX() << endl;
   cout << "Posicao Y inicial do robo antes do set: " << robot.getY() << endl;
@@ -696,103 +696,112 @@ int main(int argc, char** argv)
 
   cout<< "O tamanho do caminho eh: " << mypath.size() << endl;
 
-  int count = 1;
-  itera i = mypath.begin();
-  valorsonar=robot.getClosestSonarRange(-30,30);
-  while(i!=mypath.end()){
-    if(count % 500 == 0)
-    {
-      if(valorsonar<=dist)
+  while(robot.getX() != xFinal_Mapa && robot.getY() != yFinal_Mapa)
+  {
+    int count = 1;
+    itera i = mypath.begin();
+    valorsonar=robot.getClosestSonarRange(-30,30);
+    while(i!=mypath.end()){
+      if(count % 500 == 0)
       {
-        cout<< "ENTREI AQUI NO IF 0" << endl;
-        cout<< "Valor do sonar: " << valorsonar << endl;
-        robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
-        while(!robot.isHeadingDone());
-        robot.move(500);
-        while(!robot.isMoveDone());
-        dstar->updateStart(robot.getX(),robot.getY());
-        dstar->replan();               // plan a path
-        mypath = dstar->getPath();     // retrieve path
-        i = mypath.begin();
+        if(valorsonar<=dist)
+        {
+          cout<< "ENTREI AQUI NO IF 0" << endl;
+          cout<< "Valor do sonar: " << valorsonar << endl;
+          robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+          while(!robot.isHeadingDone());
+          if(valorsonar>dist)
+          {
+            robot.move(500);
+            while(!robot.isMoveDone());
+          }
+          dstar->updateStart(robot.getX(),robot.getY());
+          dstar->replan();               // plan a path
+          mypath = dstar->getPath();     // retrieve path
+          i = mypath.begin();
+        }
+        else
+        {
+          if(i->x > robot.getX()){ //Se o X destino for maior que o X atual, gira o robo pra grau 0 e anda 1mm
+            robot.setDeltaHeading(360-robot.getTh());
+            while(!robot.isHeadingDone());
+            valorsonar=robot.getClosestSonarRange(-30,30);
+            if(valorsonar<=dist)
+            {
+              cout<< "ENTREI AQUI NO IF 1" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+              while(!robot.isHeadingDone());
+            }
+            else{
+              cout<< "ENTREI AQUI NO ELSE 1" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.move(500);
+              while(!robot.isMoveDone());
+            }
+          }
+          else if(i->x < robot.getX()){ //Se o X destino for menor que o X atual, gira o robo pra grau 180 e anda 1mm
+            robot.setDeltaHeading(180-robot.getTh());
+            while(!robot.isHeadingDone());
+            valorsonar=robot.getClosestSonarRange(-30,30);
+            if(valorsonar<=dist)
+            {
+              cout<< "ENTREI AQUI NO IF 2" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+              while(!robot.isHeadingDone());
+            }
+            else{
+              cout<< "ENTREI AQUI NO ELSE 2" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.move(500);
+              while(!robot.isMoveDone());
+            }
+          }
+          if(i->y > robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 90 e anda 1mm
+            robot.setDeltaHeading(90-robot.getTh());
+            while(!robot.isHeadingDone());
+            valorsonar=robot.getClosestSonarRange(-30,30);
+            if(valorsonar<=dist)
+            {
+              cout<< "ENTREI AQUI NO IF 3" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+              while(!robot.isHeadingDone());
+            }
+            else{
+              cout<< "ENTREI AQUI NO ELSE 3" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.move(500);
+              while(!robot.isMoveDone());
+            }
+          }
+          else if(i->y < robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 270 e anda 1mm
+            robot.setDeltaHeading(270-robot.getTh());
+            while(!robot.isHeadingDone());
+            valorsonar=robot.getClosestSonarRange(-30,30);
+            if(valorsonar<=dist)
+            {
+              cout<< "ENTREI AQUI NO IF 4" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
+              while(!robot.isHeadingDone());
+            }
+            else{
+              cout<< "ENTREI AQUI NO ELSE 4" << endl;
+              cout<< "Valor do sonar: " << valorsonar << endl;
+              robot.move(500);
+              while(!robot.isMoveDone());
+            }
+          }
+        }
+        valorsonar=robot.getClosestSonarRange(-30,30);
       }
-      else
-      {
-        if(i->x > robot.getX()){ //Se o X destino for maior que o X atual, gira o robo pra grau 0 e anda 1mm
-          robot.setDeltaHeading(360-robot.getTh());
-          while(!robot.isHeadingDone());
-          valorsonar=robot.getClosestSonarRange(-30,30);
-          if(valorsonar<=dist)
-          {
-            cout<< "ENTREI AQUI NO IF 1" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
-            while(!robot.isHeadingDone());
-          }
-          else{
-            cout<< "ENTREI AQUI NO ELSE 1" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.move(500);
-            while(!robot.isMoveDone());
-          }
-        }
-        else if(i->x < robot.getX()){ //Se o X destino for menor que o X atual, gira o robo pra grau 180 e anda 1mm
-          robot.setDeltaHeading(180-robot.getTh());
-          while(!robot.isHeadingDone());
-          valorsonar=robot.getClosestSonarRange(-30,30);
-          if(valorsonar<=dist)
-          {
-            cout<< "ENTREI AQUI NO IF 2" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
-            while(!robot.isHeadingDone());
-          }
-          else{
-            cout<< "ENTREI AQUI NO ELSE 2" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.move(500);
-            while(!robot.isMoveDone());
-          }
-        }
-        if(i->y > robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 90 e anda 1mm
-          robot.setDeltaHeading(90-robot.getTh());
-          while(!robot.isHeadingDone());
-          valorsonar=robot.getClosestSonarRange(-30,30);
-          if(valorsonar<=dist)
-          {
-            cout<< "ENTREI AQUI NO IF 3" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
-            while(!robot.isHeadingDone());
-          }
-          else{
-            cout<< "ENTREI AQUI NO ELSE 3" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.move(500);
-            while(!robot.isMoveDone());
-          }
-        }
-        else if(i->y < robot.getY()){ //Se o Y destino for maior que o Y atual, gira o robo para grau 270 e anda 1mm
-          robot.setDeltaHeading(270-robot.getTh());
-          while(!robot.isHeadingDone());
-          valorsonar=robot.getClosestSonarRange(-30,30);
-          if(valorsonar<=dist)
-          {
-            cout<< "ENTREI AQUI NO IF 4" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
-            while(!robot.isHeadingDone());
-          }
-          else{
-            cout<< "ENTREI AQUI NO ELSE 4" << endl;
-            cout<< "Valor do sonar: " << valorsonar << endl;
-            robot.move(500);
-            while(!robot.isMoveDone());
-          }
-        }
-      }
-      valorsonar=robot.getClosestSonarRange(-30,30);
+      i++;
+      count++;
     }
-    i++;
-    count++;
+    dstar->init(robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa);
+    dstar->replan();               // plan a path
+    mypath = dstar->getPath();     // retrieve path
   }
 }
