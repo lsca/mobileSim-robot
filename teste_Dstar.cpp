@@ -614,20 +614,6 @@ int rotacao(int th_atual, int x_atual, int y_atual, int x_final, int y_final)
   return th_final;
 }
 
-int rotacaoHorizontal(int th_atual, int x_atual, int x_final)
-{
-  int th_final;
-  if(x_final > x_atual)
-  {
-    th_final = 180 - th_atual;
-  }
-  else
-  {
-    th_final = 360 - th_atual;
-  }
-  return th_final;
-}
-
 int main(int argc, char** argv)
 {
   double xInicial_Mapa,yInicial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa;
@@ -697,7 +683,7 @@ int main(int argc, char** argv)
   cout<< "O tamanho do caminho eh: " << mypath.size() << endl;
 
   while(!(xFinal_Mapa-500 < robot.getX() && robot.getX() < xFinal_Mapa + 500)
-  || !(yFinal_Mapa-500 < robot.getY() && robot.getY() < yFinal_Mapa + 500))
+  && !(yFinal_Mapa-500 < robot.getY() && robot.getY() < yFinal_Mapa + 500))
   {
     int count = 1;
     itera i = mypath.begin();
