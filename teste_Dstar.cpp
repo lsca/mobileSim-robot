@@ -617,13 +617,11 @@ int rotacao(int th_atual, int x_atual, int y_atual, int x_final, int y_final)
 int main(int argc, char** argv)
 {
   double xInicial_Mapa,yInicial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa;
-  cout << "O programa comeca agora!!" << endl;
   cin >> xInicial_Mapa;
   cin >> yInicial_Mapa;
   cin >> angulo;
   cin >> xFinal_Mapa;
   cin >> yFinal_Mapa;
-  printf("X inicial: %.1f \nY inicial: %.1f\nGrau: %.1f \nX Final: %.1f \nY Final: %.1f\n",xInicial_Mapa,yInicial_Mapa,angulo,xFinal_Mapa,yFinal_Mapa);
 
   //Inicio obrigatorio do Aria
    Aria::init();
@@ -664,23 +662,13 @@ int main(int argc, char** argv)
    //Realiza medida do menor valor apresentado pelos sonares frontais
   valorsonar=robot.getClosestSonarRange(-30,30);
   //Seta a posição do robô em relação ao mapa
-  cout << "Posicao X inicial do robo antes do set: " << robot.getX() << endl;
-  cout << "Posicao Y inicial do robo antes do set: " << robot.getY() << endl;
-  cout << "Transformando posicao do robo em relacao ao mapa..." << endl;
   robot.moveTo(ArPose(xInicial_Mapa,yInicial_Mapa,angulo),ArPose(robot.getX(),robot.getY(),robot.getTh()));
-  cout << "Posicao X inicial do robo depois do set: " << robot.getX() << endl;
-  cout << "Posicao Y inicial do robo depois do set: " << robot.getY() << endl;
-  cout << "Posicao X de destino: " << xFinal_Mapa << endl;
-  cout << "Posicao Y de destino: " << yFinal_Mapa << endl;
-  cout << "\n";
 
   Dstar *dstar = new Dstar();
   list<state> mypath;
   dstar->init(xInicial_Mapa,yInicial_Mapa,xFinal_Mapa,yFinal_Mapa);
   dstar->replan();               // plan a path
   mypath = dstar->getPath();     // retrieve path
-
-  cout<< "O tamanho do caminho eh: " << mypath.size() << endl;
 
   while(!(xFinal_Mapa-500 < robot.getX() && robot.getX() < xFinal_Mapa + 500)
   && !(yFinal_Mapa-500 < robot.getY() && robot.getY() < yFinal_Mapa + 500))
@@ -693,8 +681,6 @@ int main(int argc, char** argv)
       {
         if(valorsonar<=dist)
         {
-          cout<< "ENTREI AQUI NO IF 0" << endl;
-          cout<< "Valor do sonar: " << valorsonar << endl;
           robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
           while(!robot.isHeadingDone());
           if(valorsonar>dist)
@@ -715,14 +701,10 @@ int main(int argc, char** argv)
             valorsonar=robot.getClosestSonarRange(-30,30);
             if(valorsonar<=dist)
             {
-              cout<< "ENTREI AQUI NO IF 1" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
               while(!robot.isHeadingDone());
             }
             else{
-              cout<< "ENTREI AQUI NO ELSE 1" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.move(500);
               while(!robot.isMoveDone());
             }
@@ -733,14 +715,10 @@ int main(int argc, char** argv)
             valorsonar=robot.getClosestSonarRange(-30,30);
             if(valorsonar<=dist)
             {
-              cout<< "ENTREI AQUI NO IF 2" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
               while(!robot.isHeadingDone());
             }
             else{
-              cout<< "ENTREI AQUI NO ELSE 2" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.move(500);
               while(!robot.isMoveDone());
             }
@@ -751,14 +729,10 @@ int main(int argc, char** argv)
             valorsonar=robot.getClosestSonarRange(-30,30);
             if(valorsonar<=dist)
             {
-              cout<< "ENTREI AQUI NO IF 3" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
               while(!robot.isHeadingDone());
             }
             else{
-              cout<< "ENTREI AQUI NO ELSE 3" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.move(500);
               while(!robot.isMoveDone());
             }
@@ -769,14 +743,10 @@ int main(int argc, char** argv)
             valorsonar=robot.getClosestSonarRange(-30,30);
             if(valorsonar<=dist)
             {
-              cout<< "ENTREI AQUI NO IF 4" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.setDeltaHeading(rotacao(robot.getTh(),robot.getX(),robot.getY(),xFinal_Mapa,yFinal_Mapa));
               while(!robot.isHeadingDone());
             }
             else{
-              cout<< "ENTREI AQUI NO ELSE 4" << endl;
-              cout<< "Valor do sonar: " << valorsonar << endl;
               robot.move(500);
               while(!robot.isMoveDone());
             }
@@ -791,7 +761,6 @@ int main(int argc, char** argv)
     dstar->replan();               // plan a path
     mypath = dstar->getPath();     // retrieve path
   }
-  cout<< "SAI DESSA PORRA!!!" << endl;
   Aria::exit(1);
   return 0;
 }
